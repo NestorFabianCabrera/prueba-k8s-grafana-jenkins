@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: app-ingress
+  namespace: mi-namespace
   annotations:
     kubernetes.io/ingress.class: "nginx"
 spec:
@@ -10,9 +11,10 @@ spec:
     - host: app.example.com
       http:
         paths:
-          - path: /
+          - path: /app
             pathType: Prefix
             backend:
               service:
-                name: app-service
-                port: 80
+                name: app-svc
+                port:
+                  number: 80

@@ -63,8 +63,8 @@
       "gridPos": { "x": 12, "y": 5, "w": 12, "h": 8 },
       "datasource": { "type": "prometheus", "uid": "${datasource}" },
       "targets": [
-        { "expr": "sum(rate(http_requests_total{uri=\"/slow\"}[5m]))", "legendFormat": "Tráfico Continuo (/slow)", "refId": "A" },
-        { "expr": "sum(rate(http_requests_total{uri!=\"/slow\"}[5m]))", "legendFormat": "Otros Endpoints", "refId": "B" }
+        { "expr": "sum(rate(http_requests_total{endpoint=\"/slow\"}[5m]))", "legendFormat": "Tráfico Continuo (/slow)", "refId": "A" },
+        { "expr": "sum(rate(http_requests_total{endpoint!=\"/slow\"}[5m]))", "legendFormat": "Otros Endpoints", "refId": "B" }
       ],
       "fieldConfig": {
         "defaults": {
@@ -92,6 +92,27 @@
           "unit": "percent",
           "min": 0,
           "max": 100
+        }
+      },
+      "alert": {
+        "name": "Error rate > 5%",
+        "noDataState": "no_data",
+        "executionErrorState": "alerting",
+        "for": "2m",
+        "frequency": "1m",
+        "handler": 1,
+        "conditions": [
+          {
+            "evaluator": { "type": "gt", "params": [5] },
+            "operator": { "type": "and" },
+            "query": { "params": ["A", "5m", "now"] },
+            "reducer": { "type": "avg", "params": [] },
+            "type": "query"
+          }
+        ],
+        "labels": { "severity": "critical" },
+        "annotations": {
+          "summary": "Error rate (5xx) por encima del 5% durante 2 minutos"
         }
       }
     },

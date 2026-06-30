@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet 
 metadata:
   name: app-daemon
+  namespace: mi-namespace
 spec:
   selector:
     matchLabels:
@@ -20,4 +21,4 @@ spec:
           image: prom/node-exporter:latest
           ports:
             - containerPort: 9100
-              hostProt: 9100
+              hostPort: 9100
