@@ -28,14 +28,15 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
-                    docker run -d --rm --name app-test -p 18080:8080 $IMAGE_NAME:$IMAGE_TAG
+                    docker run -d --rm --name app-test $IMAGE_NAME:$IMAGE_TAG
+                    APP_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' app-test)
                     for i in $(seq 1 10); do
-                      if curl -fsS http://localhost:18080/health; then
+                      if curl -fsS http://$APP_IP:8080/health; then
                         break
                       fi
                       sleep 2
                     done
-                    curl -fsS http://localhost:18080/health
+                    curl -fsS http://$APP_IP:8080/health
                     docker stop app-test
                 '''
             }
