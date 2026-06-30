@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        IMAGE_NAME = 'daniel/app'
+        IMAGE_NAME = 'danieldaza14/app'
         IMAGE_TAG  = '1.0'
         KUBE_NS    = 'mi-namespace'
         REGISTRY_CREDENTIALS = credentials('registry-credentials')
